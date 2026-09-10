@@ -1,44 +1,40 @@
-# SmartCart Segmentation System
+# SmartCart — Customer Segmentation System
 
-A customer segmentation project that groups retail customers into distinct segments based on their demographics, spending behavior, and purchase channel preferences — using unsupervised machine learning.
-
-## What it does
-
-The notebook takes a raw customer dataset and:
-
-1. **Cleans the data** — fills missing income values, removes outliers (extreme ages and incomes).
-2. **Engineers new features** — customer age, total tenure (days since joining), total spending across product categories, and total number of children.
-3. **Simplifies categories** — consolidates education levels (e.g. Basic/2n Cycle → Undergraduate) and marital status into a simpler "living situation" feature (Alone / Partner).
-4. **Encodes and scales** — one-hot encodes categorical features and standardizes all numeric features.
-5. **Reduces dimensionality** — applies PCA to project the data into 3 components for clustering and visualization.
-6. **Finds the optimal number of clusters** — using the elbow method (WCSS) and silhouette scores.
-7. **Segments customers** — clusters using both K-Means and Agglomerative (Ward linkage) clustering, and compares results.
-8. **Profiles each segment** — summarizes income, spending, purchase channels, and demographics per cluster to make each segment actionable.
-
-## Tech stack
-
-- **Python**
-- **pandas** — data cleaning and manipulation
-- **matplotlib / seaborn** — visualization (pairplots, heatmaps, cluster plots)
-- **scikit-learn** — preprocessing (OneHotEncoder, StandardScaler), PCA, KMeans, AgglomerativeClustering, silhouette scoring
-- **kneed** — automatic elbow-point detection for choosing the optimal number of clusters
+## Overview
+A customer segmentation model that groups customers into distinct behavioral segments based on income, spending patterns, and purchase channel preferences, using unsupervised clustering.
 
 ## Dataset
+- Source: Kaggle — "SmartCart Customers" dataset
+- Features: Demographic data (income, education, marital status, household composition) and behavioral data (spending by product category, purchases by channel, web visits, campaign response)
 
-Uses a customer marketing dataset (`smartcart_customers.csv`) with fields such as income, education, marital status, number of children, purchase recency, spending by product category, and number of purchases per channel (web, catalog, store).
+## Approach
+- Preprocessing: Feature scaling with StandardScaler
+- Dimensionality reduction: PCA (3 components) for clustering and visualization
+- Determining optimal cluster count:
+  - Elbow method (WCSS via KneeLocator) → optimal k = 4
+  - Cross-validated with silhouette score analysis across k = 2–10
+- Final clustering: Agglomerative Clustering (ward linkage, 4 clusters)
 
-> Note: the dataset is not included in this repository — see `.gitignore`.
+## Results
+Four distinct customer segments were identified:
 
-## How to run
+| Segment | Income (avg) | Total Spending (avg) | Web Purchases | Catalog Purchases | Store Purchases | Campaign Response Rate |
+|---------|-------------|----------------------|----------------|--------------------|--------------------|--------------------------|
+| 0       | ~$39.7k     | ~$222                | 3.2            | 1.0                | 4.1                | 7.6%                     |
+| 1       | ~$72.8k     | ~$1,237              | 5.7            | 5.5                | 8.7                | 16.7%                    |
+| 2       | ~$37.0k     | ~$166                | 2.7            | 0.8                | 3.6                | 14.2%                    |
+| 3       | ~$70.7k     | ~$1,190              | 5.8            | 5.0                | 8.4                | 32.0%                    |
 
-1. Clone this repository.
-2. Place `smartcart_customers.csv` in the project root.
-3. Install dependencies:
-   ```
-   pip install pandas matplotlib seaborn scikit-learn kneed
-   ```
-4. Open and run `smartcart.ipynb` in Jupyter.
+Segments broadly separate into **low-income/low-spend** vs **high-income/high-spend** customers, with further distinction by household living situation and campaign responsiveness — segment 3 (high-income, high campaign response) represents the strongest target for marketing campaigns.
 
-## Output
+## Tech Stack
+Python, Pandas, NumPy, Scikit-learn, Seaborn, Matplotlib, kneed
 
-The final output is a set of customer segments (clusters), each profiled by average income, spending, tenure, purchase channel usage, and household composition — useful for targeted marketing or personalization strategies.
+## How to Run
+```bash
+pip install -r requirements.txt
+jupyter notebook smartcart.ipynb
+```
+
+## Contributors
+Mohammad Uruj Faizan (solo project)
